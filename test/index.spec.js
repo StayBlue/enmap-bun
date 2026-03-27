@@ -1,4 +1,4 @@
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect, spyOn } from 'bun:test';
 import { parse, stringify } from 'better-serialize';
 import Enmap from '../src/index.ts';
 import { mkdir, rm } from 'fs/promises';
@@ -15,7 +15,7 @@ describe('Enmap', () => {
     });
 
     test('should create an Enmap w/ warning', () => {
-      const spy = vi.spyOn(console, 'warn');
+      const spy = spyOn(console, 'warn');
 
       const enmap = new Enmap({ name: '::memory::' });
 
@@ -35,6 +35,7 @@ describe('Enmap', () => {
 
     test('should close database on exit', () => {
       let callback;
+      const originalOn = process.on;
       process.on = (event, cb) => {
         if (event === 'exit') {
           callback = cb;
@@ -42,10 +43,12 @@ describe('Enmap', () => {
       };
 
       const enmap = new Enmap({ inMemory: true });
+      const closeSpy = spyOn(enmap.db, 'close');
 
       callback();
+      process.on = originalOn;
 
-      expect(enmap.db.open).toBe(false);
+      expect(closeSpy).toHaveBeenCalledTimes(1);
     });
 
     test('should create a persistent Enmap w/ dir', async () => {
@@ -65,7 +68,7 @@ describe('Enmap', () => {
     test('should fail to create a persistent Enmap w/o dir', async () => {
       expect(
         () => new Enmap({ name: 'test', dataDir: './data-not-found' }),
-      ).toThrow(TypeError);
+      ).toThrow('unable to open database file');
     });
 
     test('should create/use data dir', async () => {
@@ -141,10 +144,13 @@ describe('Enmap', () => {
       });
 
       test('should call callback after set', () => {
-        const mock = vi.fn();
+        let calls = 0;
+        const mock = () => {
+          calls++;
+        };
         enmap.changed(mock);
         enmap.set('setCallback', 'value', 'sub');
-        expect(mock).toHaveBeenCalledTimes(1);
+        expect(calls).toBe(1);
         expect(enmap.get('setCallback', 'sub')).toBe('value');
       });
     });
@@ -465,7 +471,7 @@ describe('Enmap', () => {
       });
 
       test('should ignore + warn ensure value w/ default', () => {
-        const spy = vi.spyOn(process, 'emitWarning');
+        const spy = spyOn(process, 'emitWarning');
 
         expect(defaultEnmap.ensure('unknown', 'hello')).toEqual({
           hello: 'world',

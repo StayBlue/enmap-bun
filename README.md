@@ -1,43 +1,33 @@
-# Enmap - Enhanced Maps
+# Enmap Bun
 
 <div align="center">
-  <p>
-    <a href="https://discord.gg/N7ZKH3P"><img src="https://discordapp.com/api/guilds/298508738623438848/embed.png" alt="Discord server" /></a>
-    <a href="https://www.npmjs.com/package/enmap"><img src="https://img.shields.io/npm/v/enmap.svg?maxAge=3600" alt="NPM version" /></a>
-    <a href="https://www.npmjs.com/package/enmap"><img src="https://img.shields.io/npm/dt/enmap.svg?maxAge=3600" alt="NPM downloads" /></a>
-    <a href="https://www.patreon.com/eviecodes"><img src="https://img.shields.io/badge/donate-patreon-F96854.svg" alt="Patreon" /></a>
-  </p>
+  <p><img src="https://enmap.alterion.dev/assets/enmap-logo.svg" alt="Enmap Logo" /></p>
 </div>
 
-<div align="center">
-  <p><img src="https://enmap.alterion.dev/assets/enmap-logo.svg" alt="Enmap Logo" />
-</div>
+Enmap Bun is a Bun-focused fork of Enmap. It keeps the current TypeScript API and documentation structure while moving persistence to `bun:sqlite`.
 
-Enmap is a simple and efficient wrapper around SQLite, based around the idea of being a Map() with additional array methods added on to it.
-
-Enmap is:
+Enmap Bun is:
 
 - **Anti-ORM**, in that it can store any serializable data, and each value can be of a different shape. Compared to an ORM which strictly defines a shape for your data.
 - Fully **typescript compatible**. Accepts generics if you _do_ want to define a data shape for your own code. Return values are properly typed according to your generics if provided.
-- **Synchronous**. Meaning, it doesn't use callbacks or promises, no await, no .then, just call the method and go. This is thanks to [better-sqlite3][https://npm.im/better-sqlite3]!
-- **Modern and maintained**. I try to keep up to date with dependency updates, too add new functionality, and resolve issues, as fast as I can. Even if there's months where I don't update Enmap, it is not abandonned.
+- **Synchronous**. Meaning, it doesn't use callbacks or promises, no await, no .then, just call the method and go. This is powered by `bun:sqlite`.
+- Focused on **Bun-first persistence** while preserving the modern Enmap surface area from `main`.
 
 ## Documentation
 
-- [Installation](https://enmap.alterion.dev/install)
-- [Basic Setup](https://enmap.alterion.dev/usage)
-- [API Reference](https://enmap.alterion.dev/api)
+- [Installation](./docs/install/README.md)
+- [Basic Setup](./docs/usage/README.md)
+- [API Reference](./docs/api.md)
 
 ## Support
 
-Support is offered on my official [Alterion.dev Discord](https://discord.gg/N7ZKH3P).
+Open an issue in the [Linux123123/enmap-bun](https://github.com/Linux123123/enmap-bun/issues) repository.
 
 ## FAQs
 
 ### Q: What is "Persistent"?
 
-**A**: By using a database layer with `better-sqlite3`, any data added to the Enmap
-is stored up in a local database. This means that
+**A**: By using a database layer with `bun:sqlite`, any data added to the Enmap is stored in a local database. This means that
 when you restart your project, your data is not lost and is loaded on startup.
 
 ### Q: How big can the Enmap be?

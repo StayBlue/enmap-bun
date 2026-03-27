@@ -21,7 +21,13 @@ import { resolve, sep } from 'path';
 // Package.json
 const pkgdata = JSON.parse(readFileSync('./package.json', 'utf8'));
 
-import Database from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
+
+type SqliteOptions = ConstructorParameters<typeof Database>[1];
+
+function runPragma(db: Database, source: string): void {
+  db.run(`PRAGMA ${source};`);
+}
 
 // Type definitions
 export interface EnmapOptions<V = unknown, SV = unknown> {
@@ -32,7 +38,7 @@ export interface EnmapOptions<V = unknown, SV = unknown> {
   serializer?: (value: V, key: string) => SV;
   deserializer?: (value: SV, key: string) => V;
   inMemory?: boolean;
-  sqliteOptions?: Database.Options;
+  sqliteOptions?: SqliteOptions;
 }
 
 type MathOps =
@@ -75,12 +81,12 @@ type PathValue<T, P extends string> = P extends `${infer K}.${infer Rest}`
     : never;
 
 /**
- * A simple, synchronous, fast key/value storage build around better-sqlite3.
+ * A simple, synchronous, fast key/value storage build around bun:sqlite.
  * Contains extra utility methods for managing arrays and objects.
  */
 export default class Enmap<V = any, SV = unknown> {
   #name: string;
-  #db: Database.Database;
+  #db: Database;
   #inMemory: boolean;
   #autoEnsure?: V;
   #ensureProps: boolean;
@@ -102,7 +108,7 @@ export default class Enmap<V = any, SV = unknown> {
    * @param options.serializer Optional. If a function is provided, it will execute on the data when it is written to the database. This is generally used to convert the value into a format that can be saved in the database, such as converting a complete class instance to just its ID. This function may return the value to be saved, or a promise that resolves to that value (in other words, can be an async function).
    * @param options.deserializer Optional. If a function is provided, it will execute on the data when it is read from the database. This is generally used to convert the value from a stored ID into a more complex object. This function may return a value, or a promise that resolves to that value (in other words, can be an async function).
    * @param options.inMemory Optional. If set to true, the enmap will be in-memory only, and will not write to disk. Useful for temporary stores.
-   * @param options.sqliteOptions Optional. An object of options to pass to the better-sqlite3 Database constructor.
+   * @param options.sqliteOptions Optional. An object of options to pass to the bun:sqlite Database constructor.
    * @example
    * import Enmap from 'enmap';
    * // Named, Persistent enmap
@@ -169,8 +175,8 @@ export default class Enmap<V = any, SV = unknown> {
         .run();
 
       // Define table properties : sync and write-ahead-log
-      this.#db.pragma('synchronous = 1');
-      this.#db.pragma('journal_mode = wal');
+      runPragma(this.#db, 'synchronous = 1');
+      runPragma(this.#db, 'journal_mode = wal');
 
       // Create autonum table
       this.#db
@@ -320,11 +326,11 @@ export default class Enmap<V = any, SV = unknown> {
   }
 
   /**
-   * Get the better-sqlite3 database object. Useful if you want to directly query or interact with the
+   * Get the bun:sqlite database object. Useful if you want to directly query or interact with the
    * underlying SQLite database. Use at your own risk, as errors here might cause loss of data or corruption!
    * @return {Database}
    */
-  get db(): Database.Database {
+  get db(): Database {
     return this.#db;
   }
 
@@ -776,11 +782,11 @@ export default class Enmap<V = any, SV = unknown> {
    * or an array of values of `count` length
    */
   random(count = 1): [string, V][] {
-    const stmt = this.#db
-      .prepare(`SELECT key, value FROM ${this.#name} ORDER BY RANDOM() LIMIT ?`)
-      .bind(count);
+    const stmt = this.#db.prepare(
+      `SELECT key, value FROM ${this.#name} ORDER BY RANDOM() LIMIT ?`,
+    );
     const results: [string, V][] = [];
-    for (const row of stmt.iterate() as IterableIterator<{
+    for (const row of stmt.iterate(count) as IterableIterator<{
       key: string;
       value: string;
     }>) {
@@ -796,11 +802,11 @@ export default class Enmap<V = any, SV = unknown> {
    * or an array of keys of `count` length
    */
   randomKey(count = 1): string[] {
-    const stmt = this.#db
-      .prepare(`SELECT key FROM ${this.#name} ORDER BY RANDOM() LIMIT ?`)
-      .bind(count);
+    const stmt = this.#db.prepare(
+      `SELECT key FROM ${this.#name} ORDER BY RANDOM() LIMIT ?`,
+    );
     const results: string[] = [];
-    for (const row of stmt.iterate() as IterableIterator<{ key: string }>) {
+    for (const row of stmt.iterate(count) as IterableIterator<{ key: string }>) {
       results.push(row.key);
     }
     return results;

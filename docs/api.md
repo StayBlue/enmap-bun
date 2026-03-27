@@ -16,7 +16,7 @@ If you're doing a PR on the docs github, please do not manually edit the below c
 
 ## Enmap Class
 
-The Enmap class provides a simple, synchronous, fast key/value storage built around better-sqlite3.
+The Enmap class provides a simple, synchronous, fast key/value storage built around bun:sqlite.
 Contains extra utility methods for managing arrays and objects.
 
 ## Properties
@@ -26,7 +26,7 @@ Contains extra utility methods for managing arrays and objects.
 <dd><p>Get the number of key/value pairs saved in the enmap.</p>
 </dd>
 <dt><a href="#db">db</a> ⇒ <code>Database</code></dt>
-<dd><p>Get the better-sqlite3 database object. Useful if you want to directly query or interact with the
+<dd><p>Get the bun:sqlite database object. Useful if you want to directly query or interact with the
 underlying SQLite database. Use at your own risk, as errors here might cause loss of data or corruption!</p>
 </dd>
 <dt><a href="#autonum">autonum</a> ⇒ <code>string</code></dt>
@@ -177,7 +177,7 @@ Get the number of key/value pairs saved in the enmap.
 <a name="db"></a>
 
 ## db ⇒ <code>Database</code>
-Get the better-sqlite3 database object. Useful if you want to directly query or interact with the
+Get the bun:sqlite database object. Useful if you want to directly query or interact with the
 underlying SQLite database. Use at your own risk, as errors here might cause loss of data or corruption!
 
 **Kind**: instance property of <code>Enmap</code>  
@@ -734,4 +734,3 @@ Separates the Enmap into multiple arrays given a function that separates them.
 | --- | --- | --- |
 | pathOrFn | <code>\*</code> | the path to the value to test against, or the function to test with. |
 | value | <code>\*</code> | the value to use as a condition for partitioning. |
-

@@ -1,66 +1,30 @@
 ---
 description: >-
-  To install Enmap, please read these instructions very carefully, every word is important!
+  To install Enmap Bun, make sure Bun is installed first, then add the package to your project.
 ---
 
-# Enmap Installation
+# Enmap Bun Installation
 
-Enmap is a wrapper around better-sqlite3, which requires to be built directly on your system. As such, you need to install pre-requisites first. Please follow these instructions _to the letter_. If it's not written here, you probably shouldn't do it unless you know _why_ you're doing it.
+Enmap Bun is a wrapper around `bun:sqlite`, so the key prerequisite is a current Bun installation.
 
 ## Pre-Requisites
 
 {% hint style="warning" %}
-SQLite modules usually only successfully work on LTS versions of node which are even-numbered. This means
-it will work on node 18, 20, 22 but will most likely _not_ work on 17, 19, 21. Make sure you have the right version, check this with `node -v`.
+Bun support is required for this fork. Make sure Bun is installed and available in your shell before continuing. You can verify this with `bun --version`.
 {% endhint %}
 
-How to install the pre-requisites depends on your operating system, so see below for instructions:
+Install Bun by following the official instructions for your operating system:
 
-{% tabs %}
-{% tab title="Windows" %}
-On Windows, two things are required to install better-sqlite3. Python, and the Visual Studio C++ Build Tools. They are required for any module that is _built_ on the system, which includes sqlite.
+- https://bun.sh/docs/installation
 
-**The Easy Way**: When installing NodeJS, in the "Tools for native modules", make sure to check the option "Automatically install the necessary tools". This will install the required dependencies.
+## Installing Enmap Bun
 
-![](/assets/nodejs-gyp-install.png "Installing build tools in nodejs")
-
-**The slightly harder way**: If you've already installed nodejs and don't wish to reinstall it, you can install the tools using [choco](https://chocolatey.org/install). Once choco is installed, simply run the following command, _under an **administrative** command prompt or powershell:_
-
-```cmd
-choco install python visualstudio2022-workload-vctools -y
-```
-
-!!!danger Danger
-If you get an error here READ THIS: It's _very important_ that this be run in the **administrative** prompt, and not a regular one. Run as admin.
-!!!
-
-Once the build tools are installed \(this might take quite some time, depending on your internet connection\), **close all open command prompts, powershell windows, VSCode, and editors with a built-in console/prompt**. Otherwise, the next command will not work.
-{% endtab %}
-
-{% tab title="Linux" %}
-On Linux, the pre-requisites are much simpler in a way. A lot of modern systems \(such as Ubuntu, since 16.04\) already come with python pre-installed. For some other systems, you might have to fiddle with it to install python (2 or 3, whichever is easiest). Google will be your friend as is customary with Linux.
-
-As for the C++ build tools, that's installed using the simple command: `sudo apt-get install build-essential` for most debian-based systems. For others, look towards your package manager and specificall "GCC build tools".
-{% endtab %}
-
-{% tab title="Mac OS" %}
-As of writing this page, MacOS versions seem to all come pre-built with Python on the system. You will, however, need the C++ build tools.
-
-* Install [XCode](https://developer.apple.com/xcode/download/)
-* Once XCode is installed, go to **Preferences**, **Downloads**, and install the **Command Line Tools**.
-
-Once installed, you're ready to continue.
-{% endtab %}
-{% endtabs %}
-
-## Installing Enmap
-
-Once those pre-requisites are installed and you've closed all open command prompts, open a new, _normal_ \(not-admin\) command prompt or terminal in your project, then install Enmap using the following command:
+Once Bun is installed, open a terminal in your project and install Enmap Bun with:
 
 ```text
-npm i enmap
+bun add enmap-bun
 ```
 
-This will take a few minutes, as it needs to build better-sqlite3 from source code, and then install enmap itself.  Note that "a few minutes" can be 1 or 30 minutes, it really depends on your hardware and configuration.
+The runtime persistence layer comes from Bun itself, so there is no `better-sqlite3` native addon build step in this fork.
 
-If you get any errors, please see the [Troubleshooting Guide](troubleshooting-guide.md). If the guide doesn't help, join the Discord \(link at the top of this page\).
+If you get any errors, please see the [Troubleshooting Guide](troubleshooting-guide.md). If the guide doesn't help, open an issue on the fork repository.

@@ -30,7 +30,7 @@ If you're doing a PR on the docs github, please do not manually edit the below c
 
 ## Enmap Class
 
-The Enmap class provides a simple, synchronous, fast key/value storage built around better-sqlite3.
+The Enmap class provides a simple, synchronous, fast key/value storage built around bun:sqlite.
 Contains extra utility methods for managing arrays and objects.
 
 `;
@@ -99,7 +99,7 @@ async function generateJSDocMarkdown() {
 
   // Compile TypeScript first
   console.log('📦 Compiling TypeScript...');
-  execSync('npm run build', { stdio: 'inherit' });
+  execSync('bun run build', { stdio: 'inherit' });
 
   // Generate JSDoc markdown
   const rendered = await jsdoc2md.render({
@@ -251,7 +251,7 @@ async function generateAllFormats() {
     console.log(`   • Content: ${markdownOutput.length} characters`);
     console.log(`   • Methods: ${methodCount}`);
     console.log(`   • Properties: ${propertyCount}`);
-    console.log(`   • Use: npm run docs:markdown`);
+    console.log(`   • Use: bun run docs:markdown`);
   }
 
   if (typedocSuccess) {
@@ -259,7 +259,7 @@ async function generateAllFormats() {
     console.log(`   • Output: ./docs-typedoc/`);
     console.log(`   • Features: Rich HTML interface with search`);
     console.log(`   • Types: Full TypeScript type information`);
-    console.log(`   • Use: npm run docs:typedoc`);
+    console.log(`   • Use: bun run docs:typedoc`);
     console.log(`   • View: Open ./docs-typedoc/index.html in browser`);
   }
 
@@ -268,7 +268,7 @@ async function generateAllFormats() {
     console.log(`   • Output: ./docs/typedoc/ (markdown)`);
     console.log(`   • Features: TypeScript types + Retype styling`);
     console.log(`   • Integration: ./docs/typedoc/README.md`);
-    console.log(`   • Use: npm run docs:retype`);
+    console.log(`   • Use: bun run docs:retype`);
     console.log(`   • View: Your existing Retype documentation site`);
   }
 
