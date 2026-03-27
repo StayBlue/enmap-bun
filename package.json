@@ -30,12 +30,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Linux123123/enmap-bun.git"
+    "url": "git+https://github.com/StayBlue/enmap-bun.git"
   },
   "bugs": {
-    "url": "https://github.com/Linux123123/enmap-bun/issues"
+    "url": "https://github.com/StayBlue/enmap-bun/issues"
   },
-  "homepage": "https://github.com/Linux123123/enmap-bun#readme",
+  "homepage": "https://github.com/StayBlue/enmap-bun#readme",
   "keywords": [
     "sqlite",
     "sql",

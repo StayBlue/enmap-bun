@@ -21,7 +21,7 @@ Enmap Bun is:
 
 ## Support
 
-Open an issue in the [Linux123123/enmap-bun](https://github.com/Linux123123/enmap-bun/issues) repository.
+Open an issue in the [StayBlue/enmap-bun](https://github.com/StayBlue/enmap-bun/issues) repository.
 
 ## FAQs
 
