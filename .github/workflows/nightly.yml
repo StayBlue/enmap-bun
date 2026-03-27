@@ -90,7 +90,7 @@ jobs:
           gh release view nightly >/dev/null 2>&1 && gh release delete nightly --yes || true
           gh release create nightly \
             nightly-dist/*.tgz \
-            nightly-dist/SHA256SUMS.txt \
+            nightly-dist/sha256.sum \
             nightly-dist/nightly.json \
             --target "$NIGHTLY_REF" \
             --title "Nightly" \

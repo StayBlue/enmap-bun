@@ -65,7 +65,7 @@ try {
     : packedTarballName;
 
   await Bun.write(
-    joinPath(outputDir, 'SHA256SUMS.txt'),
+    joinPath(outputDir, 'sha256.sum'),
     `${sha256}  ${packedTarballName}\n`,
   );
   await Bun.write(
