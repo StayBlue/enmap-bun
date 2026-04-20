@@ -65,6 +65,23 @@ describe('Enmap', () => {
       expect(enmap).toBeInstanceOf(Enmap);
     });
 
+    test('should load a persistent Enmap when table name casing differs', async () => {
+      await mkdir('./tmp').catch(() => {});
+
+      const lowerCaseTable = new Enmap({
+        name: 'casetable',
+        dataDir: './tmp',
+      });
+      lowerCaseTable.set('record', { value: 'present' });
+
+      const camelCaseTable = new Enmap({
+        name: 'caseTable',
+        dataDir: './tmp',
+      });
+
+      expect(camelCaseTable.get('record')).toEqual({ value: 'present' });
+    });
+
     test('should fail to create a persistent Enmap w/o dir', async () => {
       expect(
         () => new Enmap({ name: 'test', dataDir: './data-not-found' }),
@@ -246,6 +263,22 @@ describe('Enmap', () => {
       test('should get values', () => {
         enmap.set('values', 'value');
         expect(enmap.values()).toEqual(['value']);
+      });
+
+      test('should return an array that supports array chaining', () => {
+        enmap.set('firstItem', { category: 'included', rank: 2 });
+        enmap.set('secondItem', { category: 'included', rank: 1 });
+        enmap.set('thirdItem', { category: 'excluded', rank: 3 });
+
+        expect(
+          enmap
+            .values()
+            .filter((entry) => entry.category === 'included')
+            .sort((left, right) => left.rank - right.rank),
+        ).toEqual([
+          { category: 'included', rank: 1 },
+          { category: 'included', rank: 2 },
+        ]);
       });
     });
 

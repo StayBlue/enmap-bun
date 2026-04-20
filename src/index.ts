@@ -161,7 +161,7 @@ export default class Enmap<V = any, SV = unknown> {
     // Check if enmap by this name is in the sqlite master table
     const table = this.#db
       .prepare(
-        "SELECT count(*) FROM sqlite_master WHERE type='table' AND name = ?;",
+        "SELECT count(*) FROM sqlite_master WHERE type='table' AND name = ? COLLATE NOCASE;",
       )
       .get(this.#name) as { 'count(*)': number };
 
@@ -170,7 +170,7 @@ export default class Enmap<V = any, SV = unknown> {
       // Create base table
       this.#db
         .prepare(
-          `CREATE TABLE ${this.#name} (key text PRIMARY KEY, value text)`,
+          `CREATE TABLE IF NOT EXISTS ${this.#name} (key text PRIMARY KEY, value text)`,
         )
         .run();
 
